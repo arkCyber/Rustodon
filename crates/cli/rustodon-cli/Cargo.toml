@@ -1,0 +1,33 @@
+[package]
+name = "rustodon-cli"
+version = "0.1.0"
+edition = "2021"
+authors = ["arkSong <arksong2018@gmail.com>"]
+description = "Rustodon module"
+license = "MIT"
+repository = "https://github.com/arkCyber/Rustodon"
+keywords = ["mastodon", "activitypub", "social", "federation"]
+categories = ["social-networking"]
+
+[dependencies]
+# Core dependencies
+tokio = { version = "1.0", features = ["full"] }
+tracing = "0.1"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+thiserror = "1.0"
+anyhow = "1.0"
+uuid = { version = "1.0", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+futures = "0.3"
+async-trait = "0.1"
+
+# Web framework dependencies (only for API crates)
+clap = { version = "4.4", features = ["derive"] }
+indicatif = "0.17"
+console = "0.15"
+colored = "2.0"
+
+# Internal dependencies
+rustodon-core = { path = "../../core/rustodon-core" }
+sqlx = { version = "0.7.3", features = ["runtime-tokio-rustls", "postgres", "chrono", "uuid"] }
