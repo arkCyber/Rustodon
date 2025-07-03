@@ -1,0 +1,31 @@
+[package]
+name = "rustodon-lists"
+version = "0.1.0"
+edition = "2021"
+authors = ["arkSong <arksong2018@gmail.com>"]
+description = "A Rust implementation of Mastodon server backend, aiming for 100% compatibility with original Mastodon server functionality"
+license = "AGPL-3.0"
+repository = "https://github.com/arkCyber/Rustodon"
+keywords = ["mastodon", "activitypub", "federation", "social-network", "rust"]
+categories = ["web-programming", "api-bindings", "social-networking"]
+
+[dependencies]
+# Core dependencies
+tokio = { version = "1.35", features = ["full"] }
+tracing = { version = "0.1.40", features = ["std"] }
+serde = { version = "1.0.195", features = ["derive"] }
+serde_json = "1.0.111"
+thiserror = "1.0.56"
+anyhow = "1.0.79"
+uuid = { version = "1.7.0", features = ["v4", "serde"] }
+chrono = { version = "0.4.31", features = ["serde"] }
+futures = "0.3.29"
+async-trait = "0.1.77"
+
+# Database dependencies
+sqlx = { version = "0.7.3", features = ["runtime-tokio-rustls", "postgres", "chrono", "uuid"] }
+
+# Web framework dependencies (only for API crates)
+
+# Internal dependencies
+rustodon-core = { path = "../rustodon-core" }

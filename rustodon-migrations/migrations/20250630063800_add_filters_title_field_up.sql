@@ -1,0 +1,2 @@
+-- Up migration
+ALTER TABLE filters ADD COLUMN IF NOT EXISTS title VARCHAR(255);

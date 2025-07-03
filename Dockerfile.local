@@ -1,0 +1,89 @@
+# Rustodon Dockerfile - Local Rust Environment
+# Author: arkSong (arksong2018@gmail.com)
+# Project: rustodon
+#
+# This Dockerfile uses local Rust installation to avoid network issues
+# Build: docker build -f Dockerfile.local -t rustodon .
+# Run: docker run --rm -e DATABASE_URL=postgres://rustodon:rustodon@host.docker.internal:5432/rustodon -p 3000:3000 rustodon
+#
+# Features:
+# - Uses local Rust installation
+# - Multi-stage build for smaller final image
+# - Proper caching for faster rebuilds
+# - Security best practices
+
+# ---- Build Stage ----
+FROM debian:bookworm-slim as builder
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    build-essential \
+    pkg-config \
+    libssl-dev \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Rust using rustup with specific version
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain 1.75.0
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+# Copy Cargo files first for better caching
+COPY Cargo.toml Cargo.lock ./
+
+# Create dummy source files to build dependencies
+RUN mkdir -p rustodon-server/src && \
+    echo "fn main() {}" > rustodon-server/src/main.rs
+
+# Build dependencies only (this layer will be cached)
+RUN cargo build --release -p rustodon-server
+
+# Copy actual source code
+COPY . .
+
+# Touch main.rs to ensure it's newer than the dummy
+RUN touch rustodon-server/src/main.rs
+
+# Build the actual application
+RUN cargo build --release -p rustodon-server
+
+# ---- Runtime Stage ----
+FROM debian:bookworm-slim
+
+WORKDIR /app
+
+# Install runtime dependencies only
+RUN apt-get update && apt-get install -y \
+    libssl3 \
+    ca-certificates \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create non-root user for security
+RUN groupadd -r rustodon && useradd -r -g rustodon rustodon
+
+# Copy binary from builder stage
+COPY --from=builder /app/target/release/rustodon-server /usr/local/bin/rustodon-server
+
+# Set proper ownership
+RUN chown rustodon:rustodon /usr/local/bin/rustodon-server && \
+    chmod +x /usr/local/bin/rustodon-server
+
+# Create necessary directories
+RUN mkdir -p /app/logs /app/config && \
+    chown -R rustodon:rustodon /app
+
+# Switch to non-root user
+USER rustodon
+
+# Expose port
+EXPOSE 3000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:3000/health || exit 1
+
+# Default command
+CMD ["rustodon-server"]

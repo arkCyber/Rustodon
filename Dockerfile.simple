@@ -1,0 +1,45 @@
+# Rustodon Dockerfile - Simple Local Build
+# Author: arkSong (arksong2018@gmail.com)
+# Project: rustodon
+#
+# Simple single-stage Dockerfile for local development
+# Avoids network issues by using local Rust installation
+# Build: docker build -f Dockerfile.simple -t rustodon .
+# Run: docker run --rm -e DATABASE_URL=postgres://rustodon:rustodon@host.docker.internal:5432/rustodon -p 3000:3000 rustodon
+
+FROM debian:bookworm-slim
+
+WORKDIR /app
+
+# Install all necessary packages in one layer
+RUN apt-get update && apt-get install -y \
+    curl \
+    build-essential \
+    pkg-config \
+    libssl-dev \
+    libssl3 \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Rust
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+# Copy source code
+COPY . .
+
+# Build the application
+RUN cargo build --release -p rustodon-server
+
+# Create user and set permissions
+RUN groupadd -r rustodon && useradd -r -g rustodon rustodon && \
+    chown -R rustodon:rustodon /app
+
+# Switch to non-root user
+USER rustodon
+
+# Expose port
+EXPOSE 3000
+
+# Start the application
+CMD ["/app/target/release/rustodon-server"]

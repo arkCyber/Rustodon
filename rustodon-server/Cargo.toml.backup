@@ -1,0 +1,91 @@
+[package]
+name = "rustodon-server"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+tracing = { workspace = true, features = ["tracing-chrome"] }
+tokio = { version = "1.0", features = ["full"] }
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+async-trait = "0.1"
+rustodon-api = { path = "../rustodon-api" }
+rustodon-db = { path = "../rustodon-db" }
+rustodon-workers = { path = "../rustodon-workers" }
+rustodon-mailer = { path = "../rustodon-mailer" }
+rustodon-config = { path = "../rustodon-config" }
+rustodon-logging = { path = "../rustodon-logging" }
+rustodon-metrics = { path = "../rustodon-metrics" }
+rustodon-cache = { path = "../rustodon-cache" }
+rustodon-queue = { path = "../rustodon-queue" }
+rustodon-storage = { path = "../rustodon-storage" }
+rustodon-notifications = { path = "../rustodon-notifications" }
+rustodon-media = { path = "../rustodon-media" }
+rustodon-federation = { path = "../rustodon-federation" }
+rustodon-webhooks = { path = "../rustodon-webhooks" }
+rustodon-scheduler = { path = "../rustodon-scheduler" }
+rustodon-migrations = { path = "../rustodon-migrations" }
+rustodon-cli = { path = "../rustodon-cli" }
+rustodon-streaming = { path = "../rustodon-streaming" }
+rustodon-oauth = { path = "../rustodon-oauth" }
+rustodon-polls = { path = "../rustodon-polls" }
+rustodon-bookmarks = { path = "../rustodon-bookmarks" }
+rustodon-reports = { path = "../rustodon-reports" }
+rustodon-follow-requests = { path = "../rustodon-follow-requests" }
+rustodon-announcements = { path = "../rustodon-announcements" }
+rustodon-custom-emojis = { path = "../rustodon-custom-emojis" }
+rustodon-trends = { path = "../rustodon-trends" }
+rustodon-tags = { path = "../rustodon-tags" }
+rustodon-conversations = { path = "../rustodon-conversations" }
+rustodon-mentions = { path = "../rustodon-mentions" }
+rustodon-favourites = { path = "../rustodon-favourites" }
+rustodon-reblogs = { path = "../rustodon-reblogs" }
+rustodon-follows = { path = "../rustodon-follows" }
+rustodon-filters = { path = "../rustodon-filters" }
+rustodon-lists = { path = "../rustodon-lists" }
+rustodon-groups = { path = "../rustodon-groups" }
+rustodon-statuses = { path = "../rustodon-statuses" }
+rustodon-accounts = { path = "../rustodon-accounts" }
+rustodon-instances = { path = "../rustodon-instances" }
+rustodon-domains = { path = "../rustodon-domains" }
+rustodon-sessions = { path = "../rustodon-sessions" }
+rustodon-applications = { path = "../rustodon-applications" }
+rustodon-access-tokens = { path = "../rustodon-access-tokens" }
+rustodon-access-grants = { path = "../rustodon-access-grants" }
+rustodon-devices = { path = "../rustodon-devices" }
+rustodon-encrypted-messages = { path = "../rustodon-encrypted-messages" }
+rustodon-preview-cards = { path = "../rustodon-preview-cards" }
+rustodon-scheduled-statuses = { path = "../rustodon-scheduled-statuses" }
+rustodon-status-pins = { path = "../rustodon-status-pins" }
+rustodon-account-notes = { path = "../rustodon-account-notes" }
+rustodon-account-warnings = { path = "../rustodon-account-warnings" }
+rustodon-account-moderation-notes = { path = "../rustodon-account-moderation-notes" }
+rustodon-account-deletion-requests = { path = "../rustodon-account-deletion-requests" }
+rustodon-account-aliases = { path = "../rustodon-account-aliases" }
+rustodon-account-conversations = { path = "../rustodon-account-conversations" }
+rustodon-account-suggestions = { path = "../rustodon-account-suggestions" }
+rustodon-annual-reports = { path = "../rustodon-annual-reports" }
+rustodon-terms-of-service = { path = "../rustodon-terms-of-service" }
+rustodon-user-settings = { path = "../rustodon-user-settings" }
+rustodon-web = { path = "../rustodon-web" }
+rustodon-mutes = { path = "../rustodon-mutes" }
+rustodon-blocks = { path = "../rustodon-blocks" }
+rustodon-ip-blocks = { path = "../rustodon-ip-blocks" }
+rustodon-email-domain-blocks = { path = "../rustodon-email-domain-blocks" }
+rustodon-canonical-email-blocks = { path = "../rustodon-canonical-email-blocks" }
+rustodon-appeals = { path = "../rustodon-appeals" }
+rustodon-bulk-imports = { path = "../rustodon-bulk-imports" }
+rustodon-software-updates = { path = "../rustodon-software-updates" }
+rustodon-severed-relationships = { path = "../rustodon-severed-relationships" }
+rustodon-tag-follows = { path = "../rustodon-tag-follows" }
+rustodon-follow-recommendation-suppressions = { path = "../rustodon-follow-recommendation-suppressions" }
+rustodon-webauthn-credentials = { path = "../rustodon-webauthn-credentials" }
+thiserror = "1.0"
+anyhow = "1.0"
+# High-performance dependencies
+num_cpus = "1.16"
+lazy_static = "1.4"
+libc = "0.2"
+
+[features]
+default = []
+performance-testing = ["tracing/tracing-chrome"]

@@ -1,0 +1,1 @@
+ALTER TABLE filters ADD COLUMN filter_action VARCHAR(50) NOT NULL DEFAULT 'warn';

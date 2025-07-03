@@ -1,0 +1,42 @@
+[package]
+name = "rustodon-media"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tracing = { workspace = true }
+# 异步运行时
+tokio = { version = "1.0", features = ["full"] }
+# 序列化和反序列化
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+# 数据库操作
+sqlx = { version = "0.7", features = ["runtime-tokio-rustls", "postgres", "chrono", "uuid", "json"] }
+# 时间处理
+chrono = { version = "0.4", features = ["serde"] }
+# UUID 生成
+uuid = { version = "1.0", features = ["v4", "serde"] }
+# 错误处理
+anyhow = "1.0"
+thiserror = "1.0"
+# 图像处理
+image = { version = "0.24", features = ["jpeg", "png", "gif", "webp"] }
+# 视频处理（可选，需要 FFmpeg）
+# ffmpeg-next = { version = "6.0", optional = true }
+# 文件系统操作
+tempfile = "3.0"
+# 哈希计算
+sha2 = "0.10"
+# BlurHash 生成
+blurhash = "0.2"
+# MIME 类型检测
+mime_guess = "2.0"
+# 日志记录
+log = "0.4"
+# 文件上传处理
+bytes = "1.0"
+# 异步文件操作
+tokio-util = { version = "0.7", features = ["io"] }
+[features]
+default = []
+video-processing = []  # 启用视频处理功能

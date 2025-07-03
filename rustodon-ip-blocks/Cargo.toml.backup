@@ -1,0 +1,24 @@
+[package]
+name = "rustodon-ip-blocks"
+version = "0.1.0"
+edition = "2021"
+description = "IP blocking functionality for Rustodon"
+authors = ["arkSong <arksong2018@gmail.com>"]
+license = "AGPL-3.0"
+repository = "https://github.com/arksong/rustodon"
+
+[dependencies]
+tracing = { workspace = true }
+rustodon-core = { path = "../rustodon-core" }
+rustodon-db = { path = "../rustodon-db" }
+rustodon-config = { path = "../rustodon-config" }
+rustodon-logging = { path = "../rustodon-logging" }
+serde = { version = "1.0", features = ["derive"] }
+thiserror = "1.0"
+chrono = { version = "0.4", features = ["serde"] }
+sqlx = { version = "0.7", features = ["runtime-tokio-rustls", "postgres", "chrono", "ipnetwork"] }
+tokio = { version = "1.0", features = ["full"] }
+cidr = "0.3"
+ipnetwork = "0.20"
+[dev-dependencies]
+tokio-test = "0.4"

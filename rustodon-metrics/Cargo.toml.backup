@@ -1,0 +1,15 @@
+[package]
+name = "rustodon-metrics"
+version = "0.1.0"
+edition = "2021"
+authors = ["arkSong <arksong2018@gmail.com>"]
+description = "Metrics and monitoring for Rustodon server"
+repository = "https://github.com/arksong/rustodon"
+license = "MIT"
+
+[dependencies]
+tracing = { workspace = true }
+prometheus = "0.13"
+serde = { version = "1.0", features = ["derive"] }
+thiserror = "1.0"
+tokio = { version = "1.0", features = ["full"] }

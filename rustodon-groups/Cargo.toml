@@ -1,0 +1,28 @@
+[package]
+name = "rustodon-groups"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+description.workspace = true
+license.workspace = true
+repository.workspace = true
+keywords.workspace = true
+categories.workspace = true
+
+[dependencies]
+# Core dependencies
+tokio.workspace = true
+tracing.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+anyhow.workspace = true
+uuid.workspace = true
+chrono.workspace = true
+futures.workspace = true
+async-trait.workspace = true
+
+# Web framework dependencies (only for API crates)
+
+# Internal dependencies
+rustodon-core = { path = "../rustodon-core" }

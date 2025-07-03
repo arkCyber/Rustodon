@@ -1,0 +1,4 @@
+-- Add missing fields to lists table
+ALTER TABLE lists ADD COLUMN IF NOT EXISTS title VARCHAR(255) NOT NULL DEFAULT 'Untitled List';
+ALTER TABLE lists ADD COLUMN IF NOT EXISTS replies_policy VARCHAR(50) NOT NULL DEFAULT 'list';
+ALTER TABLE lists ADD COLUMN IF NOT EXISTS exclusive BOOLEAN NOT NULL DEFAULT false;

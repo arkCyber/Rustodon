@@ -1,0 +1,27 @@
+[package]
+name = "rustodon-oauth"
+version = "0.1.0"
+edition = "2021"
+authors = ["arkSong <arksong2018@gmail.com>"]
+description = "OAuth2 provider for Rustodon"
+license = "MIT"
+
+[dependencies]
+tracing = { workspace = true }
+rustodon-core = { path = "../rustodon-core" }
+rustodon-db = { path = "../rustodon-db" }
+rustodon-config = { path = "../rustodon-config" }
+rustodon-logging = { path = "../rustodon-logging" }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+chrono = { version = "0.4", features = ["serde"] }
+sqlx = { version = "0.7", features = ["runtime-tokio-rustls", "postgres", "chrono"] }
+thiserror = "1.0"
+uuid = { version = "1.0", features = ["v4"] }
+tokio = { version = "1.0", features = ["full"] }
+base64 = "0.21"
+sha2 = "0.10"
+hmac = "0.12"
+hex = "0.4"
+[dev-dependencies]
+tokio-test = "0.4"
