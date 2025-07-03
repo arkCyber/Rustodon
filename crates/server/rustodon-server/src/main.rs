@@ -115,6 +115,7 @@ fn is_port_available(port: u16) -> bool {
 }
 
 /// Initialize performance-optimized Tokio runtime
+#[allow(dead_code)]
 fn create_optimized_runtime(config: &PerformanceConfig) -> tokio::runtime::Runtime {
     info!(
         "Creating optimized Tokio runtime with {} worker threads",

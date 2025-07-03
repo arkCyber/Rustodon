@@ -86,8 +86,8 @@ mod tests {
 
     #[test]
     fn test_poll_service_new() {
-        let service = PollService::new();
-        assert!(true); // Service created successfully
+        let _service = PollService::new();
+        // Service created successfully
     }
 
     #[tokio::test]

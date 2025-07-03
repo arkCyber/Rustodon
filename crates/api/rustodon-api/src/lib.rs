@@ -229,7 +229,7 @@ async fn instance_handler() -> impl IntoResponse {
 
 /// User registration handler
 async fn register_handler(
-    State(state): State<AppState>,
+    State(_state): State<AppState>,
     Json(request): Json<RegisterRequest>,
 ) -> impl IntoResponse {
     debug!(
@@ -237,7 +237,7 @@ async fn register_handler(
         request.username
     );
 
-    match register_user(&state.pool, request).await {
+    match register_user(&_state.pool, request).await {
         Ok(session) => {
             info!("User registered successfully");
             (
@@ -269,7 +269,7 @@ async fn register_handler(
 
 /// User login handler
 async fn login_handler(
-    State(state): State<AppState>,
+    State(_state): State<AppState>,
     Json(request): Json<LoginRequest>,
 ) -> impl IntoResponse {
     debug!(
@@ -277,7 +277,7 @@ async fn login_handler(
         request.username_or_email
     );
 
-    match login_user(&state.pool, request).await {
+    match login_user(&_state.pool, request).await {
         Ok(session) => {
             info!("User logged in successfully");
             (
@@ -309,7 +309,7 @@ async fn login_handler(
 
 /// Create status handler
 async fn create_status_handler(
-    State(state): State<AppState>,
+    State(_state): State<AppState>,
     Json(request): Json<StatusRequest>,
 ) -> impl IntoResponse {
     debug!("Handling status creation request");
@@ -1082,31 +1082,31 @@ mod tests {
 
     #[tokio::test]
     async fn test_instance_handler() {
-        let response = instance_handler().await;
+        let _response = instance_handler().await;
         // Add assertions for the JSON response
     }
 
     #[tokio::test]
     async fn test_accounts_handler() {
-        let response = accounts_handler().await;
+        let _response = accounts_handler().await;
         // Add assertions for the JSON response
     }
 
     #[tokio::test]
     async fn test_statuses_handler() {
-        let response = statuses_handler().await;
+        let _response = statuses_handler().await;
         // Add assertions for the JSON response
     }
 
     #[tokio::test]
     async fn test_public_timeline_handler() {
-        let response = public_timeline_handler().await;
+        let _response = public_timeline_handler().await;
         // Add assertions for the JSON response
     }
 
     #[tokio::test]
     async fn test_apps_handler() {
-        let response = apps_handler().await;
+        let _response = apps_handler().await;
         // Add assertions for the JSON response
     }
 }

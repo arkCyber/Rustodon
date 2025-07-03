@@ -11,6 +11,7 @@ use tracing::{info, trace};
 
 /// ActivityPub service
 pub struct ActivityPubService {
+    #[allow(dead_code)]
     pool: PgPool,
 }
 
@@ -49,8 +50,7 @@ mod tests {
         // For now, just test that the struct can be created
         let pool = PgPool::connect("postgresql://test:test@localhost:5432/test").await;
         if let Ok(pool) = pool {
-            let service = ActivityPubService::new(pool);
-            assert!(true); // Service created successfully
+            let _service = ActivityPubService::new(pool);
         }
     }
 }

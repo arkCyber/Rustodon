@@ -27,6 +27,7 @@ pub struct TrendingStatus {
 
 /// Trends service
 pub struct TrendsService {
+    #[allow(dead_code)]
     cache: HashMap<String, (DateTime<Utc>, Vec<u8>)>, // Simple in-memory cache
 }
 
@@ -46,12 +47,14 @@ impl TrendsService {
     }
 
     /// Calculate tag score
+    #[allow(dead_code)]
     fn calculate_tag_score(&self, _tag: &str, _history: &[TrendHistory]) -> f64 {
         // TODO: Implement tag score calculation
         0.0
     }
 
     /// Calculate status score
+    #[allow(dead_code)]
     fn calculate_status_score(&self, _status: &TrendingStatus) -> f64 {
         // TODO: Implement status score calculation
         0.0

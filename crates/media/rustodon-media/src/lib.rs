@@ -148,10 +148,11 @@ impl FocalPoint {
 
         Self::new(x, y)
     }
+}
 
-    /// 转换为字符串格式
-    pub fn to_string(&self) -> String {
-        format!("{},{}", self.x, self.y)
+impl std::fmt::Display for FocalPoint {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{},{}", self.x, self.y)
     }
 }
 
@@ -1082,7 +1083,7 @@ mod tests {
     use super::*;
     use bytes::Bytes;
 
-    /// 创建测试用的 1x1 像素 PNG 图片
+    #[allow(dead_code)]
     fn create_test_image() -> Bytes {
         // 1x1 像素的透明 PNG 图片
         let png_data = vec![

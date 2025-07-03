@@ -145,18 +145,15 @@ impl IpBlockService {
             "#,
         );
         let mut params: Vec<String> = Vec::new();
-        let mut param_count = 1;
 
         if let Some(ref ip_address) = query.ip_address {
-            sql.push_str(&format!(" AND ip_address = ${}", param_count));
+            sql.push_str(&format!(" AND ip_address = ${}", params.len() + 1));
             params.push(ip_address.clone());
-            param_count += 1;
         }
 
         if let Some(ref severity) = query.severity {
-            sql.push_str(&format!(" AND severity = ${}", param_count));
+            sql.push_str(&format!(" AND severity = ${}", params.len() + 1));
             params.push(severity.to_string());
-            param_count += 1;
         }
 
         sql.push_str(" ORDER BY created_at DESC");
@@ -213,6 +210,7 @@ impl IpBlockService {
     /// # Returns
     ///
     /// Result indicating success or failure
+    #[allow(dead_code)]
     fn validate_ip_address(&self, ip_address: &str) -> Result<(), IpBlockError> {
         if ip_address.parse::<std::net::IpAddr>().is_ok() {
             Ok(())
@@ -233,6 +231,7 @@ impl IpBlockService {
     /// # Returns
     ///
     /// Result indicating success or failure
+    #[allow(dead_code)]
     fn validate_cidr_range(&self, cidr_range: &str) -> Result<(), IpBlockError> {
         if cidr_range.parse::<ipnetwork::IpNetwork>().is_ok() {
             Ok(())
@@ -255,8 +254,8 @@ mod tests {
         // For now, just test that the struct can be created
         let pool = PgPool::connect("postgresql://test:test@localhost:5432/test").await;
         if let Ok(pool) = pool {
-            let service = IpBlockService::new(pool);
-            assert!(true); // Service created successfully
+            let _service = IpBlockService::new(pool);
+            // Service created successfully
         }
     }
 }

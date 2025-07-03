@@ -49,8 +49,8 @@ mod tests {
 
     #[test]
     fn test_scheduled_status_service_new() {
-        let service = ScheduledStatusService::new();
-        assert!(true); // Service created successfully
+        let _service = ScheduledStatusService::new();
+        // Service created successfully
     }
 
     #[test]

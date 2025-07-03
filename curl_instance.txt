@@ -1,19 +1,0 @@
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 127.0.0.1:3000...
-* Connected to 127.0.0.1 (127.0.0.1) port 3000
-> GET /api/v1/instance HTTP/1.1
-> Host: 127.0.0.1:3000
-> User-Agent: curl/8.7.1
-> Accept: */*
-> 
-* Request completely sent off
-< HTTP/1.1 200 OK
-< content-type: application/json
-< content-length: 1040
-< date: Thu, 03 Jul 2025 05:07:27 GMT
-< 
-{ [1040 bytes data]
-100  1040  100  1040    0     0   625k      0 --:--:-- --:--:-- --:--:-- 1015k
-* Connection #0 to host 127.0.0.1 left intact
-{"approval_required":false,"configuration":{"media_attachments":{"image_matrix_limit":16777216,"image_size_limit":10485760,"supported_mime_types":["image/jpeg","image/png","image/gif","image/webp","video/mp4","video/webm"],"video_frame_rate_limit":60,"video_matrix_limit":2304000,"video_size_limit":41943040},"polls":{"max_characters_per_option":50,"max_expiration":2629746,"max_options":4,"min_expiration":300},"statuses":{"characters_reserved_per_url":23,"max_characters":500,"max_media_attachments":4}},"contact_account":null,"description":"Rustodon is a modern, type-safe, and high-performance implementation of the Mastodon server written in Rust.","email":"admin@rustodon.example.com","invites_enabled":false,"languages":["en"],"registrations":true,"short_description":"A high-performance Rust implementation of Mastodon server","stats":{"domain_count":0,"status_count":0,"user_count":0},"thumbnail":null,"title":"Rustodon Instance","uri":"rustodon.example.com","urls":{"streaming_api":"wss://rustodon.example.com"},"version":"0.1.0"}

@@ -82,7 +82,7 @@ impl TagFollow {
         }
         let tag_exists = sqlx::query!(
             r#"SELECT COUNT(*) as count FROM tags WHERE id = $1"#,
-            tag_id
+            tag_id as i32
         )
         .fetch_one(pool)
         .await?
@@ -119,13 +119,7 @@ impl TagFollow {
             id: follow_row.id,
             account_id: follow_row.account_id,
             tag_id: follow_row.tag_id,
-            created_at: DateTime::from_naive_utc_and_offset(
-                match follow_row.created_at {
-                    Some(dt) => dt,
-                    None => panic!("created_at should not be null"),
-                },
-                Utc,
-            ),
+            created_at: follow_row.created_at.unwrap_or_else(Utc::now),
         };
         info!(
             "Account {} followed tag {} as follow {}",
@@ -216,13 +210,7 @@ impl TagFollow {
                 id: row.id,
                 account_id: row.account_id,
                 tag_id: row.tag_id,
-                created_at: DateTime::from_naive_utc_and_offset(
-                    match row.created_at {
-                        Some(dt) => dt,
-                        None => panic!("created_at should not be null"),
-                    },
-                    Utc,
-                ),
+                created_at: row.created_at.unwrap_or_else(Utc::now),
             })
             .collect();
         debug!(
@@ -240,7 +228,7 @@ struct TagFollowRow {
     id: i64,
     account_id: i64,
     tag_id: i64,
-    created_at: Option<chrono::NaiveDateTime>,
+    created_at: Option<DateTime<Utc>>,
 }
 
 #[cfg(test)]

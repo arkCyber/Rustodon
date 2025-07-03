@@ -203,42 +203,42 @@ impl RustodonError {
 
     /// Check if this error should be logged
     pub fn should_log(&self) -> bool {
-        match self {
-            RustodonError::Database(_) => true,
-            RustodonError::Internal(_) => true,
-            RustodonError::Configuration(_) => true,
-            RustodonError::FileSystem(_) => true,
-            RustodonError::Cache(_) => true,
-            RustodonError::Queue(_) => true,
-            RustodonError::Search(_) => true,
-            RustodonError::Email(_) => true,
-            RustodonError::Webhook(_) => true,
-            RustodonError::Worker(_) => true,
-            RustodonError::Scheduler(_) => true,
-            RustodonError::Admin(_) => true,
-            RustodonError::Cli(_) => true,
-            _ => false,
-        }
+        matches!(
+            self,
+            RustodonError::Database(_)
+                | RustodonError::Internal(_)
+                | RustodonError::Configuration(_)
+                | RustodonError::FileSystem(_)
+                | RustodonError::Cache(_)
+                | RustodonError::Queue(_)
+                | RustodonError::Search(_)
+                | RustodonError::Email(_)
+                | RustodonError::Webhook(_)
+                | RustodonError::Worker(_)
+                | RustodonError::Scheduler(_)
+                | RustodonError::Admin(_)
+                | RustodonError::Cli(_)
+        )
     }
 
     /// Check if this error should be reported to monitoring
     pub fn should_report(&self) -> bool {
-        match self {
-            RustodonError::Database(_) => true,
-            RustodonError::Internal(_) => true,
-            RustodonError::Configuration(_) => true,
-            RustodonError::FileSystem(_) => true,
-            RustodonError::Cache(_) => true,
-            RustodonError::Queue(_) => true,
-            RustodonError::Search(_) => true,
-            RustodonError::Email(_) => true,
-            RustodonError::Webhook(_) => true,
-            RustodonError::Worker(_) => true,
-            RustodonError::Scheduler(_) => true,
-            RustodonError::Admin(_) => true,
-            RustodonError::Cli(_) => true,
-            _ => false,
-        }
+        matches!(
+            self,
+            RustodonError::Database(_)
+                | RustodonError::Internal(_)
+                | RustodonError::Configuration(_)
+                | RustodonError::FileSystem(_)
+                | RustodonError::Cache(_)
+                | RustodonError::Queue(_)
+                | RustodonError::Search(_)
+                | RustodonError::Email(_)
+                | RustodonError::Webhook(_)
+                | RustodonError::Worker(_)
+                | RustodonError::Scheduler(_)
+                | RustodonError::Admin(_)
+                | RustodonError::Cli(_)
+        )
     }
 }
 

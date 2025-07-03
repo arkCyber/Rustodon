@@ -85,8 +85,8 @@ mod tests {
 
     #[test]
     fn test_admin_service_new() {
-        let service = AdminService::new();
-        assert!(true); // Service created successfully
+        let _service = AdminService::new();
+        // Service created successfully
     }
 
     #[tokio::test]

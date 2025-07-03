@@ -35,7 +35,7 @@ pub enum TagError {
     #[error("Database error: {0}")]
     Database(#[from] sqlx::Error),
     #[error("Tag not found: {0}")]
-    TagNotFound(i64),
+    TagNotFound(i32),
     #[error("Tag name already exists")]
     TagNameExists,
     #[error("Validation error: {0}")]
@@ -48,7 +48,7 @@ pub enum TagError {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Tag {
     /// Unique identifier for the tag
-    pub id: i64,
+    pub id: i32,
     /// Name of the tag
     pub name: String,
     /// When the tag was created
@@ -86,15 +86,15 @@ impl Tag {
         let tag = Tag {
             id: tag_row.id,
             name: tag_row.name,
-            created_at: DateTime::from_naive_utc_and_offset(tag_row.created_at, Utc),
-            updated_at: DateTime::from_naive_utc_and_offset(tag_row.updated_at, Utc),
+            created_at: tag_row.created_at.unwrap_or_else(Utc::now),
+            updated_at: tag_row.updated_at.unwrap_or_else(Utc::now),
         };
         info!("Created tag: {} (id: {})", tag.name, tag.id);
         Ok(tag)
     }
 
     /// Gets a tag by id
-    pub async fn get(pool: &PgPool, id: i64) -> Result<Self, TagError> {
+    pub async fn get(pool: &PgPool, id: i32) -> Result<Self, TagError> {
         trace!("Getting tag by id: {}", id);
         let tag_row = sqlx::query_as!(
             TagRow,
@@ -111,15 +111,15 @@ impl Tag {
         let tag = Tag {
             id: tag_row.id,
             name: tag_row.name,
-            created_at: DateTime::from_naive_utc_and_offset(tag_row.created_at, Utc),
-            updated_at: DateTime::from_naive_utc_and_offset(tag_row.updated_at, Utc),
+            created_at: tag_row.created_at.unwrap_or_else(Utc::now),
+            updated_at: tag_row.updated_at.unwrap_or_else(Utc::now),
         };
         debug!("Got tag: {} (id: {})", tag.name, tag.id);
         Ok(tag)
     }
 
     /// Updates a tag's name
-    pub async fn update(pool: &PgPool, id: i64, new_name: &str) -> Result<Self, TagError> {
+    pub async fn update(pool: &PgPool, id: i32, new_name: &str) -> Result<Self, TagError> {
         trace!("Updating tag id {} to new name: {}", id, new_name);
         // Check if new name already exists
         let exists = sqlx::query!(
@@ -150,15 +150,15 @@ impl Tag {
         let tag = Tag {
             id: tag_row.id,
             name: tag_row.name,
-            created_at: DateTime::from_naive_utc_and_offset(tag_row.created_at, Utc),
-            updated_at: DateTime::from_naive_utc_and_offset(tag_row.updated_at, Utc),
+            created_at: tag_row.created_at.unwrap_or_else(Utc::now),
+            updated_at: tag_row.updated_at.unwrap_or_else(Utc::now),
         };
         info!("Updated tag: {} (id: {})", tag.name, tag.id);
         Ok(tag)
     }
 
     /// Deletes a tag by id
-    pub async fn delete(pool: &PgPool, id: i64) -> Result<(), TagError> {
+    pub async fn delete(pool: &PgPool, id: i32) -> Result<(), TagError> {
         trace!("Deleting tag by id: {}", id);
         let result = sqlx::query!(r#"DELETE FROM tags WHERE id = $1"#, id)
             .execute(pool)
@@ -191,8 +191,8 @@ impl Tag {
             .map(|row| Tag {
                 id: row.id,
                 name: row.name,
-                created_at: DateTime::from_naive_utc_and_offset(row.created_at, Utc),
-                updated_at: DateTime::from_naive_utc_and_offset(row.updated_at, Utc),
+                created_at: row.created_at.unwrap_or_else(Utc::now),
+                updated_at: row.updated_at.unwrap_or_else(Utc::now),
             })
             .collect();
         debug!("Listed {} tags", tags.len());
@@ -203,10 +203,10 @@ impl Tag {
 /// Internal struct for database rows
 #[derive(sqlx::FromRow)]
 struct TagRow {
-    id: i64,
+    id: i32,
     name: String,
-    created_at: chrono::NaiveDateTime,
-    updated_at: chrono::NaiveDateTime,
+    created_at: Option<DateTime<Utc>>,
+    updated_at: Option<DateTime<Utc>>,
 }
 
 #[cfg(test)]

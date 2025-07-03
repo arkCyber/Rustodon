@@ -48,8 +48,8 @@ mod tests {
 
     #[test]
     fn test_instance_service_new() {
-        let service = InstanceService::new();
-        assert!(true); // Service created successfully
+        let _service = InstanceService::new();
+        // Service created successfully
     }
 
     #[tokio::test]
@@ -63,6 +63,6 @@ mod tests {
             version: "1.0.0".to_string(),
         };
         service.do_something(instance).await;
-        assert!(true); // Operation completed
+        // Operation completed
     }
 }

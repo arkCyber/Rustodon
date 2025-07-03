@@ -80,8 +80,8 @@ mod tests {
 
     #[test]
     fn test_report_service_new() {
-        let service = ReportService::new();
-        assert!(true); // Service created successfully
+        let _service = ReportService::new();
+        // Service created successfully
     }
 
     #[tokio::test]

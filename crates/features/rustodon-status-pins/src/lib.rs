@@ -130,13 +130,7 @@ impl StatusPin {
             id: pin_row.id,
             account_id: pin_row.account_id,
             status_id: pin_row.status_id,
-            created_at: DateTime::from_naive_utc_and_offset(
-                match pin_row.created_at {
-                    Some(dt) => dt,
-                    None => panic!("created_at should not be null"),
-                },
-                Utc,
-            ),
+            created_at: pin_row.created_at.unwrap_or_else(Utc::now),
         };
         info!(
             "Pinned status {} for account {} as pin {}",
@@ -237,13 +231,7 @@ impl StatusPin {
                 id: row.id,
                 account_id: row.account_id,
                 status_id: row.status_id,
-                created_at: DateTime::from_naive_utc_and_offset(
-                    match row.created_at {
-                        Some(dt) => dt,
-                        None => panic!("created_at should not be null"),
-                    },
-                    Utc,
-                ),
+                created_at: row.created_at.unwrap_or_else(Utc::now),
             })
             .collect();
         debug!("Retrieved {} pins for account {}", pins.len(), account_id);
@@ -257,7 +245,7 @@ struct StatusPinRow {
     id: i64,
     account_id: i64,
     status_id: i64,
-    created_at: Option<chrono::NaiveDateTime>,
+    created_at: Option<DateTime<Utc>>,
 }
 
 #[cfg(test)]

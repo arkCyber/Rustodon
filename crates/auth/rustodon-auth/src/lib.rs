@@ -8,18 +8,18 @@
 //!
 //! ```rust
 //! use rustodon_auth::{register_user, login_user, RegisterRequest, LoginRequest};
-//! use rustodon_db::establish_connection;
+//! use rustodon_db::init_database;
 //! #[tokio::main]
 //! async fn main() {
-//!     let pool = establish_connection("postgres://localhost/rustodon_test").await.unwrap();
+//!     let pool = init_database().await.unwrap();
 //!     let request = RegisterRequest {
 //!         username: "exampleuser123".to_string(),
 //!         email: "example123@example.com".to_string(),
 //!         password: "password123".to_string(),
 //!     };
-//!     let result = register_user(&pool, request).await;
-//!     if let Ok(session) = result {
-//!         println!("User registered with ID: {}", session.user_id);
+//!     match register_user(&pool, request).await {
+//!         Ok(session) => println!("User registered with ID: {}", session.user_id),
+//!         Err(e) => println!("Registration failed: {}", e),
 //!     }
 //! }
 //! ```
@@ -225,16 +225,12 @@ pub fn verify_jwt_token(token: &str, config: &JwtConfig) -> Result<Claims, AuthE
 /// # Returns
 /// Option with token string
 pub fn extract_token_from_headers(headers: &HeaderMap) -> Option<String> {
-    headers
-        .get("Authorization")
-        .and_then(|auth_header| auth_header.to_str().ok())
-        .and_then(|auth_str| {
-            if auth_str.starts_with("Bearer ") {
-                Some(auth_str[7..].to_string())
-            } else {
-                None
-            }
-        })
+    headers.get("authorization").and_then(|value| {
+        let auth_str = value.to_str().ok()?;
+        auth_str
+            .strip_prefix("Bearer ")
+            .map(|stripped| stripped.to_string())
+    })
 }
 
 /// Authentication middleware for Axum
@@ -359,10 +355,10 @@ pub fn hash_password(password: &str) -> Result<String, AuthError> {
 ///
 /// ```rust
 /// use rustodon_auth::{register_user, RegisterRequest};
-/// use rustodon_db::establish_connection;
+/// use rustodon_db::init_database;
 /// #[tokio::main]
 /// async fn main() {
-///     let pool = establish_connection("postgres://localhost/rustodon_test").await.unwrap();
+///     let pool = init_database().await.unwrap();
 ///     let request = RegisterRequest {
 ///         username: "newuser".to_string(),
 ///         email: "new@example.com".to_string(),
@@ -392,18 +388,15 @@ pub async fn register_user(
     }
 
     // Check if user already exists
-    if let Some(_) = User::get_by_username(pool, &request.username).await? {
-        return Err(AuthError::UserExists(format!(
-            "Username {} already exists",
-            request.username
-        )));
+    if User::get_by_username(pool, &request.username)
+        .await?
+        .is_some()
+    {
+        return Err(AuthError::UserExists(request.username.clone()));
     }
 
-    if let Some(_) = User::get_by_email(pool, &request.email).await? {
-        return Err(AuthError::UserExists(format!(
-            "Email {} already exists",
-            request.email
-        )));
+    if User::get_by_email(pool, &request.email).await?.is_some() {
+        return Err(AuthError::UserExists(request.email.clone()));
     }
 
     // Hash password
@@ -440,10 +433,10 @@ pub async fn register_user(
 ///
 /// ```rust
 /// use rustodon_auth::{login_user, LoginRequest};
-/// use rustodon_db::establish_connection;
+/// use rustodon_db::init_database;
 /// #[tokio::main]
 /// async fn main() {
-///     let pool = establish_connection("postgres://localhost/rustodon_test").await.unwrap();
+///     let pool = init_database().await.unwrap();
 ///     let request = LoginRequest {
 ///         username_or_email: "exampleuser".to_string(),
 ///         password: "password123".to_string(),

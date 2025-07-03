@@ -65,8 +65,8 @@ mod tests {
 
     #[test]
     fn test_custom_emoji_service_new() {
-        let service = CustomEmojiService::new();
-        assert!(true); // Service created successfully
+        let _service = CustomEmojiService::new();
+        // Service created successfully
     }
 
     #[tokio::test]
