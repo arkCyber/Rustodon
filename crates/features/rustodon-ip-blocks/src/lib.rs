@@ -31,11 +31,9 @@
 //!
 //! arkSong (arksong2018@gmail.com)
 
-use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use sqlx::PgPool;
-use thiserror::Error;
-use tracing::{debug, error, info, trace, warn};
+use tracing::{debug, error, info, trace};
 
 pub mod error;
 pub mod models;
@@ -159,7 +157,6 @@ pub async fn init_ip_blocks(pool: &PgPool, config: &IpBlockConfig) -> Result<(),
 #[cfg(test)]
 mod tests {
     use super::*;
-    use tokio::test;
 
     #[tokio::test]
     async fn test_ip_block_config_default() {

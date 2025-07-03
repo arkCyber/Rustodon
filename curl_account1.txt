@@ -1,0 +1,16 @@
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 127.0.0.1:3000...
+* Connected to 127.0.0.1 (127.0.0.1) port 3000
+> GET /api/v1/accounts/1 HTTP/1.1
+> Host: 127.0.0.1:3000
+> User-Agent: curl/8.7.1
+> Accept: */*
+> 
+* Request completely sent off
+< HTTP/1.1 404 Not Found
+< content-length: 0
+< date: Thu, 03 Jul 2025 05:07:27 GMT
+< 
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+* Connection #0 to host 127.0.0.1 left intact

@@ -6,11 +6,20 @@
 //!
 //! # Examples
 //!
-//! ```rust
+//! ```rust,no_run
 //! use rustodon_announcements::{Announcement, AnnouncementService};
+//! use sqlx::PgPool;
 //!
-//! let service = AnnouncementService::new(pool);
-//! let announcements = service.get_all_published().await?;
+//! #[tokio::main]
+//! async fn main() -> Result<(), Box<dyn std::error::Error>> {
+//!     // Connect to database (replace with your connection string)
+//!     let pool = PgPool::connect("postgres://localhost/rustodon").await?;
+//!
+//!     let service = AnnouncementService::new(pool);
+//!     let announcements = service.get_all_published().await?;
+//!
+//!     Ok(())
+//! }
 //! ```
 //!
 //! # Dependencies

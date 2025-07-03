@@ -8,7 +8,7 @@
 
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
-use tracing::{debug, error, info, trace, warn};
+use tracing::{error, info};
 
 /// Follow recommendation suppression model
 #[derive(Debug, Clone, Serialize, Deserialize)]

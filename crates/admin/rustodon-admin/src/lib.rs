@@ -49,6 +49,12 @@ pub enum AdminError {
 /// Admin service
 pub struct AdminService;
 
+impl Default for AdminService {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl AdminService {
     /// Creates a new admin service
     pub fn new() -> Self {

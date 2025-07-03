@@ -7,7 +7,7 @@
 //! arkSong (arksong2018@gmail.com)
 
 use serde::{Deserialize, Serialize};
-use tracing::{debug, error, info, trace, warn};
+use tracing::{error, info, trace};
 
 /// Poll model
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -47,6 +47,12 @@ pub enum PollsError {
 /// Poll service
 pub struct PollService;
 
+impl Default for PollService {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl PollService {
     /// Creates a new poll service
     pub fn new() -> Self {
@@ -55,10 +61,7 @@ impl PollService {
     }
 
     /// Create poll
-    pub async fn create_poll(
-        &self,
-        _request: CreatePollRequest,
-    ) -> Result<Poll, PollsError> {
+    pub async fn create_poll(&self, _request: CreatePollRequest) -> Result<Poll, PollsError> {
         trace!("Creating poll");
         // TODO: Implement poll creation
         Ok(Poll {
@@ -70,10 +73,7 @@ impl PollService {
     }
 
     /// Vote on poll
-    pub async fn vote_poll(
-        &self,
-        _request: VotePollRequest,
-    ) -> Result<(), PollsError> {
+    pub async fn vote_poll(&self, _request: VotePollRequest) -> Result<(), PollsError> {
         trace!("Voting on poll");
         // TODO: Implement poll voting
         Ok(())

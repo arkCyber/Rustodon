@@ -37,20 +37,20 @@
 //!
 //! arkSong (arksong2018@gmail.com)
 
-use base64::{Engine as _, engine::general_purpose};
-use rustodon_db::User;
-use serde::{Deserialize, Serialize};
-use sqlx::PgPool;
-use thiserror::Error;
-use tracing::{debug, error, info};
 use axum::{
     extract::{Request, State},
     http::{HeaderMap, StatusCode},
     middleware::Next,
     response::Response,
 };
-use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Header, Validation};
+use base64::{engine::general_purpose, Engine as _};
 use bcrypt::{hash, verify, DEFAULT_COST};
+use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Header, Validation};
+use rustodon_db::User;
+use serde::{Deserialize, Serialize};
+use sqlx::PgPool;
+use thiserror::Error;
+use tracing::{debug, error, info};
 
 /// Authentication error type
 #[derive(Error, Debug)]
@@ -164,9 +164,8 @@ pub struct JwtConfig {
 impl Default for JwtConfig {
     fn default() -> Self {
         Self {
-            secret: std::env::var("JWT_SECRET").unwrap_or_else(|_| {
-                "your-secret-key-change-in-production".to_string()
-            }),
+            secret: std::env::var("JWT_SECRET")
+                .unwrap_or_else(|_| "your-secret-key-change-in-production".to_string()),
             expiration_hours: 24,
         }
     }

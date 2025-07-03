@@ -6,9 +6,9 @@
 //!
 //! arkSong (arksong2018@gmail.com)
 
-use chrono::{DateTime, NaiveDateTime, Utc};
-use sqlx::types::ipnetwork::IpNetwork;
+use chrono::{NaiveDateTime, Utc};
 use serde::{Deserialize, Serialize};
+use sqlx::types::ipnetwork::IpNetwork;
 use sqlx::FromRow;
 use tracing::trace;
 
@@ -95,7 +95,10 @@ impl IpBlock {
             "suspend" => Ok(IpBlockSeverity::Suspend),
             "silence" => Ok(IpBlockSeverity::Silence),
             "block" => Ok(IpBlockSeverity::Block),
-            _ => Err(IpBlockError::Validation(format!("Invalid severity: {}", self.severity))),
+            _ => Err(IpBlockError::Validation(format!(
+                "Invalid severity: {}",
+                self.severity
+            ))),
         }
     }
 }

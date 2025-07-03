@@ -466,14 +466,39 @@ impl OAuthProvider {
 
     /// Generate client ID
     fn generate_client_id(&self) -> String {
+        Self::generate_client_id_static()
+    }
+
+    /// Generate client secret
+    fn generate_client_secret(&self) -> String {
+        Self::generate_client_secret_static()
+    }
+
+    /// Generate authorization code
+    fn generate_authorization_code(&self) -> String {
+        Self::generate_authorization_code_static()
+    }
+
+    /// Generate access token
+    fn generate_access_token(&self) -> String {
+        Self::generate_access_token_static()
+    }
+
+    /// Generate refresh token
+    fn generate_refresh_token(&self) -> String {
+        Self::generate_refresh_token_static()
+    }
+
+    /// Generate client ID (static version for testing)
+    pub(crate) fn generate_client_id_static() -> String {
         let mut hasher = Sha256::new();
         hasher.update(Uuid::new_v4().to_string().as_bytes());
         hasher.update(chrono::Utc::now().timestamp().to_string().as_bytes());
         hex::encode(hasher.finalize())[..32].to_string()
     }
 
-    /// Generate client secret
-    fn generate_client_secret(&self) -> String {
+    /// Generate client secret (static version for testing)
+    pub(crate) fn generate_client_secret_static() -> String {
         let mut hasher = Sha256::new();
         hasher.update(Uuid::new_v4().to_string().as_bytes());
         hasher.update(
@@ -486,24 +511,24 @@ impl OAuthProvider {
         hex::encode(hasher.finalize())[..64].to_string()
     }
 
-    /// Generate authorization code
-    fn generate_authorization_code(&self) -> String {
+    /// Generate authorization code (static version for testing)
+    pub(crate) fn generate_authorization_code_static() -> String {
         let mut hasher = Sha256::new();
         hasher.update(Uuid::new_v4().to_string().as_bytes());
         hasher.update(chrono::Utc::now().timestamp_millis().to_string().as_bytes());
         hex::encode(hasher.finalize())[..32].to_string()
     }
 
-    /// Generate access token
-    fn generate_access_token(&self) -> String {
+    /// Generate access token (static version for testing)
+    pub(crate) fn generate_access_token_static() -> String {
         let mut hasher = Sha256::new();
         hasher.update(Uuid::new_v4().to_string().as_bytes());
         hasher.update(chrono::Utc::now().timestamp_micros().to_string().as_bytes());
         hex::encode(hasher.finalize())[..64].to_string()
     }
 
-    /// Generate refresh token
-    fn generate_refresh_token(&self) -> String {
+    /// Generate refresh token (static version for testing)
+    pub(crate) fn generate_refresh_token_static() -> String {
         let mut hasher = Sha256::new();
         hasher.update(Uuid::new_v4().to_string().as_bytes());
         hasher.update(
@@ -519,23 +544,29 @@ impl OAuthProvider {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use tokio::test;
-
     #[test]
-    async fn test_oauth_provider_creation() {
-        // This would require a test database setup
-        // For now, just test the token generation functions
-        let provider = OAuthProvider::new(
-            sqlx::PgPool::connect("postgres://localhost/test")
-                .await
-                .unwrap(),
-        );
+    fn test_oauth_token_generation() {
+        // Test that token generation functions produce correct length strings
+        // This test doesn't require database connection
+        use crate::OAuthProvider;
 
-        let client_id = provider.generate_client_id();
-        let client_secret = provider.generate_client_secret();
+        let client_id = OAuthProvider::generate_client_id_static();
+        let client_secret = OAuthProvider::generate_client_secret_static();
+        let auth_code = OAuthProvider::generate_authorization_code_static();
+        let access_token = OAuthProvider::generate_access_token_static();
+        let refresh_token = OAuthProvider::generate_refresh_token_static();
 
         assert_eq!(client_id.len(), 32);
         assert_eq!(client_secret.len(), 64);
+        assert_eq!(auth_code.len(), 32);
+        assert_eq!(access_token.len(), 64);
+        assert_eq!(refresh_token.len(), 64);
+
+        // Test that the strings are valid hex
+        assert!(client_id.chars().all(|c| c.is_ascii_hexdigit()));
+        assert!(client_secret.chars().all(|c| c.is_ascii_hexdigit()));
+        assert!(auth_code.chars().all(|c| c.is_ascii_hexdigit()));
+        assert!(access_token.chars().all(|c| c.is_ascii_hexdigit()));
+        assert!(refresh_token.chars().all(|c| c.is_ascii_hexdigit()));
     }
 }

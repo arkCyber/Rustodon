@@ -22,7 +22,10 @@ impl ActivityPubService {
     }
 
     /// Process incoming ActivityPub activity
-    pub async fn process_activity(&self, _activity: &str) -> Result<(), Box<dyn std::error::Error>> {
+    pub async fn process_activity(
+        &self,
+        _activity: &str,
+    ) -> Result<(), Box<dyn std::error::Error>> {
         trace!("Processing ActivityPub activity");
         // TODO: Implement activity processing
         Ok(())

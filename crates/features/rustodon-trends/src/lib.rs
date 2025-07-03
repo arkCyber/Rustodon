@@ -9,7 +9,7 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-use tracing::{debug, error, info, trace, warn};
+use tracing::info;
 
 /// Trend history
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -28,6 +28,12 @@ pub struct TrendingStatus {
 /// Trends service
 pub struct TrendsService {
     cache: HashMap<String, (DateTime<Utc>, Vec<u8>)>, // Simple in-memory cache
+}
+
+impl Default for TrendsService {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl TrendsService {

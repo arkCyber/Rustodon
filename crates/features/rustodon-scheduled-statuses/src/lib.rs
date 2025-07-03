@@ -22,6 +22,12 @@ pub enum ScheduledStatusError {
 /// Scheduled status service
 pub struct ScheduledStatusService;
 
+impl Default for ScheduledStatusService {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl ScheduledStatusService {
     /// Creates a new scheduled status service
     pub fn new() -> Self {

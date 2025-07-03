@@ -8,7 +8,7 @@
 
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
-use tracing::{debug, error, info, trace, warn};
+use tracing::{error, info};
 
 /// Software update model
 #[derive(Debug, Clone, Serialize, Deserialize)]

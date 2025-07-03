@@ -31,6 +31,12 @@ pub enum EmojiError {
     Internal(String),
 }
 
+impl Default for CustomEmojiService {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl CustomEmojiService {
     /// Creates a new custom emoji service
     pub fn new() -> Self {
@@ -39,20 +45,14 @@ impl CustomEmojiService {
     }
 
     /// Update emoji
-    pub async fn update_emoji(
-        &self,
-        _request: UpdateEmojiRequest,
-    ) -> Result<(), EmojiError> {
+    pub async fn update_emoji(&self, _request: UpdateEmojiRequest) -> Result<(), EmojiError> {
         trace!("Updating emoji");
         // TODO: Implement emoji update
         Ok(())
     }
 
     /// Process emoji image
-    pub async fn process_emoji_image(
-        &self,
-        _image_data: &[u8],
-    ) -> Result<(), EmojiError> {
+    pub async fn process_emoji_image(&self, _image_data: &[u8]) -> Result<(), EmojiError> {
         trace!("Processing emoji image");
         // TODO: Implement image processing
         Ok(())

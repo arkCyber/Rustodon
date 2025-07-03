@@ -8,10 +8,9 @@
 
 use chrono::{Duration, Utc};
 use sqlx::PgPool;
-use sqlx::types::ipnetwork::IpNetwork;
-use tracing::{debug, error, info, trace};
+use tracing::{debug, info, trace};
 
-use super::{models::IpBlock, CreateIpBlockRequest, IpBlockError, IpBlockQuery, UpdateIpBlockRequest};
+use super::{models::IpBlock, CreateIpBlockRequest, IpBlockError, IpBlockQuery};
 
 /// IP block service
 pub struct IpBlockService {
@@ -44,12 +43,14 @@ impl IpBlockService {
         // IP address and CIDR range are already validated as IpNetwork types
 
         // Calculate expiration time
-        let expires_at = request.duration.map(|duration| {
-            Utc::now().naive_utc() + Duration::seconds(duration as i64)
-        });
+        let expires_at = request
+            .duration
+            .map(|duration| Utc::now().naive_utc() + Duration::seconds(duration as i64));
 
         // Create the block
-        let reason = request.reason.unwrap_or_else(|| "No reason provided".to_string());
+        let reason = request
+            .reason
+            .unwrap_or_else(|| "No reason provided".to_string());
         let result = sqlx::query_as_unchecked!(
             IpBlock,
             r#"
@@ -216,7 +217,10 @@ impl IpBlockService {
         if ip_address.parse::<std::net::IpAddr>().is_ok() {
             Ok(())
         } else {
-            Err(IpBlockError::Validation(format!("Invalid IP address: {}", ip_address)))
+            Err(IpBlockError::Validation(format!(
+                "Invalid IP address: {}",
+                ip_address
+            )))
         }
     }
 
@@ -233,7 +237,10 @@ impl IpBlockService {
         if cidr_range.parse::<ipnetwork::IpNetwork>().is_ok() {
             Ok(())
         } else {
-            Err(IpBlockError::Validation(format!("Invalid CIDR range: {}", cidr_range)))
+            Err(IpBlockError::Validation(format!(
+                "Invalid CIDR range: {}",
+                cidr_range
+            )))
         }
     }
 }

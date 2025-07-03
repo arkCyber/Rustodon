@@ -34,12 +34,12 @@ use anyhow::{Context, Result};
 use bytes::Bytes;
 use chrono::{DateTime, Utc};
 use image::{DynamicImage, ImageFormat};
-use tracing::{debug, error, info, warn};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use sqlx::{PgPool, Row};
 use tokio::fs;
 use tokio::io::AsyncWriteExt;
+use tracing::{debug, error, info, warn};
 
 /// 媒体类型枚举
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -130,7 +130,7 @@ pub struct FocalPoint {
 impl FocalPoint {
     /// 创建新的焦点坐标
     pub fn new(x: f32, y: f32) -> Result<Self> {
-        if x < -1.0 || x > 1.0 || y < -1.0 || y > 1.0 {
+        if !(-1.0..=1.0).contains(&x) || !(-1.0..=1.0).contains(&y) {
             anyhow::bail!("焦点坐标必须在 -1.0 到 1.0 范围内");
         }
         Ok(Self { x, y })
@@ -921,18 +921,17 @@ impl MediaProcessor {
         let meta_json: serde_json::Value = row
             .try_get("meta")
             .unwrap_or_else(|_| serde_json::json!({}));
-        let meta: MediaMetadata =
-            serde_json::from_value(meta_json).unwrap_or_else(|_| MediaMetadata {
-                focus: None,
-                original: None,
-                small: None,
-                duration: None,
-                fps: None,
-                audio_encode: None,
-                audio_bitrate: None,
-                audio_channels: None,
-                bitrate: None,
-            });
+        let meta: MediaMetadata = serde_json::from_value(meta_json).unwrap_or(MediaMetadata {
+            focus: None,
+            original: None,
+            small: None,
+            duration: None,
+            fps: None,
+            audio_encode: None,
+            audio_bitrate: None,
+            audio_channels: None,
+            bitrate: None,
+        });
 
         let media_type_str: String = row.try_get("type")?;
         let processing_status_str: String = row.try_get("processing_status")?;
@@ -1055,7 +1054,7 @@ impl MediaProcessor {
     /// 删除媒体文件
     async fn delete_media_files(config: &StorageConfig, url: &str) -> Result<()> {
         // 从 URL 提取文件名
-        if let Some(file_name) = url.split('/').last() {
+        if let Some(file_name) = url.split('/').next_back() {
             let original_path = config.media_root.join("original").join(file_name);
             let small_path = config.media_root.join("small").join(file_name);
 
@@ -1082,7 +1081,6 @@ impl MediaProcessor {
 mod tests {
     use super::*;
     use bytes::Bytes;
-    use tempfile::TempDir;
 
     /// 创建测试用的 1x1 像素 PNG 图片
     fn create_test_image() -> Bytes {

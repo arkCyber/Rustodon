@@ -21,8 +21,6 @@ use sqlx::migrate::Migrator;
 use std::path::Path;
 use tracing::info;
 
-static MIGRATOR: Migrator = sqlx::migrate!("./migrations_clean");
-
 #[derive(Parser, Debug)]
 #[command(name = "rustodon-migrations")]
 struct Cli {
@@ -55,7 +53,9 @@ async fn main() -> Result<(), MigrationError> {
         Commands::Migrate => {
             info!("Running migrations...");
             let pool = sqlx::PgPool::connect(&database_url).await?;
-            MIGRATOR.run(&pool).await?;
+            // Use dynamic migrator to avoid compile-time version caching
+            let migrator = Migrator::new(Path::new("migrations")).await?;
+            migrator.run(&pool).await?;
             info!("Migrations complete.");
         }
         Commands::Reset => {
@@ -64,7 +64,8 @@ async fn main() -> Result<(), MigrationError> {
             sqlx::query("DROP SCHEMA public CASCADE; CREATE SCHEMA public;")
                 .execute(&pool)
                 .await?;
-            MIGRATOR.run(&pool).await?;
+            let migrator = Migrator::new(Path::new("migrations")).await?;
+            migrator.run(&pool).await?;
             info!("Database reset and migrated.");
         }
         Commands::Create { name } => {

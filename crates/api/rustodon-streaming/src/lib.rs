@@ -37,14 +37,14 @@ use futures::{SinkExt, StreamExt};
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 use tokio::sync::broadcast;
-use tracing::{debug, error, info, warn};
-use uuid::Uuid;
 use tower_http::{
     compression::CompressionLayer,
     cors::{Any, CorsLayer},
-    trace::TraceLayer,
     limit::RequestBodyLimitLayer,
+    trace::TraceLayer,
 };
+use tracing::{debug, error, info, warn};
+use uuid::Uuid;
 
 /// Streaming error type
 #[derive(Debug, thiserror::Error)]
@@ -175,7 +175,7 @@ impl StreamingServer {
                     .allow_origin(Any)
                     .allow_methods(Any)
                     .allow_headers(Any)
-                    .allow_credentials(true)
+                    .allow_credentials(true),
             )
             .layer(CompressionLayer::new())
             .layer(RequestBodyLimitLayer::new(1024 * 1024)); // 1MB limit for streaming

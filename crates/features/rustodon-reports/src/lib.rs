@@ -7,7 +7,7 @@
 //! arkSong (arksong2018@gmail.com)
 
 use serde::{Deserialize, Serialize};
-use tracing::{debug, error, info, trace, warn};
+use tracing::{error, info, trace};
 
 /// Report category
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -39,6 +39,12 @@ pub enum ReportsError {
 /// Report service
 pub struct ReportService;
 
+impl Default for ReportService {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl ReportService {
     /// Creates a new report service
     pub fn new() -> Self {
@@ -47,10 +53,7 @@ impl ReportService {
     }
 
     /// Update report
-    pub async fn update_report(
-        &self,
-        _request: UpdateReportRequest,
-    ) -> Result<(), ReportsError> {
+    pub async fn update_report(&self, _request: UpdateReportRequest) -> Result<(), ReportsError> {
         trace!("Updating report");
         // TODO: Implement report update
         Ok(())

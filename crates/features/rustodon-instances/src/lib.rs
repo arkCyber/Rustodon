@@ -7,7 +7,7 @@
 //! arkSong (arksong2018@gmail.com)
 
 use serde::{Deserialize, Serialize};
-use tracing::{debug, error, info, trace, warn};
+use tracing::{info, trace};
 
 /// Instance model
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -21,6 +21,12 @@ pub struct Instance {
 
 /// Instance service
 pub struct InstanceService;
+
+impl Default for InstanceService {
+    fn default() -> Self {
+        Self::new()
+    }
+}
 
 impl InstanceService {
     /// Creates a new instance service

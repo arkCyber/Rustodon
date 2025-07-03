@@ -20,9 +20,9 @@
 //!
 //! arkSong (arksong2018@gmail.com)
 
-use tracing::{info, warn, error, debug, trace};
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
+use tracing::{debug, error, info, trace};
 
 /// Custom error type for analytics module
 #[derive(Error, Debug)]
@@ -101,7 +101,6 @@ impl Default for Analytics {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use tokio::test;
 
     #[tokio::test]
     async fn test_analytics_new() {

@@ -173,7 +173,7 @@ fn get_memory_usage_mb() -> u64 {
     {
         // macOS memory usage approximation
         if let Ok(output) = std::process::Command::new("ps")
-            .args(&["-o", "rss=", "-p", &std::process::id().to_string()])
+            .args(["-o", "rss=", "-p", &std::process::id().to_string()])
             .output()
         {
             if let Ok(rss_str) = String::from_utf8(output.stdout) {
@@ -260,7 +260,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     });
 
     // Start mailer (mock example)
-    let mailer = MockMailer::default();
+    let mailer = MockMailer;
     let email = Email {
         to: "admin@example.com".to_string(),
         subject: "Rustodon Started - High Performance Mode".to_string(),
